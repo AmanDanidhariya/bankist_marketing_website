@@ -11,6 +11,8 @@ const allBtn = document.getElementsByTagName('button');
 const header = document.querySelector('.header');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section_1 = document.getElementById('section--1');
+const nav__links = document.querySelector('.nav__links');
+const h1 = document.querySelector('h1');
 
 const openModal = function (e) {
   e.preventDefault();
@@ -75,63 +77,73 @@ btnScrollTo.addEventListener('click', e => {
 
 ///////////////////////////////////////////
 //page navigation
-document.querySelectorAll('.nav__link').forEach(el =>
-  el.addEventListener('click', function (e) {
+// document.querySelectorAll('.nav__link').forEach(el =>
+//   el.addEventListener('click', function (e) {
+//     e.preventDefault();
+//     const id = this.getAttribute('href');
+//     console.log(id);
+
+//     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
+//   })
+// );
+
+//1.add event listener to common parent element
+//2.determine what element originated the event
+
+nav__links.addEventListener('click', function (e) {
+  //matching strategy
+  if (e.target.classList.contains('nav__link')) {
     e.preventDefault();
-    const id = this.getAttribute('href');
-    console.log(id);
-    
+    const id = e.target.getAttribute('href');
     document.querySelector(id).scrollIntoView({ behavior: 'smooth' });
-  })
-);
-
-// //attributes
-//  const logo =document.querySelector('.nav__logo');
-//  console.log(logo.alt);
-//  console.log(logo.src);
-//  console.log(logo.getAttribute('designer'));
-//  logo.alt="first"
-//  logo.setAttribute("company", "india")
-//  console.log(logo.src);
-
-//  const link = document.querySelector(".twitter-link");
-//  console.log(link.href);
-
-//  //data attribute
-// console.log(logo.dataset.versionNumber);
-
-// //classes
-// logo.classList.add("");
-// logo.classList.contains("");
-// logo.classList.toggle("");
-// logo.classList.remove("");
-// logo.className="jonas"
+  }
+});
 
 btnScrollTo.addEventListener('click', e => {
-  // const s1coords = section_1.getBoundingClientRect();
-  // console.log(s1coords);
-  // console.log(e.target.getBoundingClientRect());
-  // console.log('current scroll X/Y', window.pageXOffset, window.pageYOffset);
-
-  // console.log(
-  //   'height/width of current viewport',
-  //   document.documentElement.clientHeight,
-  //   document.documentElement.clientWidth
-  // );
-
-  //scrolling
-  // window.scrollTo(
-  //   //current position + current scroll
-  //   s1coords.left + window.pageXOffset,
-  //   s1coords.top + window.pageYOffset
-  // );
-  // window.scrollTo({
-  //   left: s1coords.left + window.pageXOffset,
-  //   top: s1coords.top + window.pageYOffset,
-  //   behavior:'smooth',
-  // });
   section_1.scrollIntoView({ behavior: 'smooth' });
 });
+
+//tabbed component
+const operationTabs = document.querySelectorAll('.operations__tab');
+const tabContainer = document.querySelector('.operations__tab-container');
+const operationContent = document.querySelectorAll('.operations__content');
+
+//event delegation
+tabContainer.addEventListener('click', function (e) {
+  const clickedTab = e.target.closest('.operations__tab');
+
+  //guard clause
+  if (!clickedTab) return;
+  //
+  operationTabs.forEach(tab => tab.classList.remove('operations__tab--active'));
+  clickedTab.classList.add('operations__tab--active');
+
+  operationContent.forEach(content =>
+    content.classList.remove('operations__content--active')
+  );
+  //activate tab content area
+  document
+    .querySelector(`.operations__content--${clickedTab.dataset.tab}`)
+    .classList.add('operations__content--active');
+});
+
+//going downWords:child
+// console.log(h1.querySelectorAll('.highlight'));
+// console.log(h1.children);
+// h1.firstElementChild.style.color="white";
+// console.log(h1.parentElement);
+// console.log(h1.parentNode);
+
+// h1.closest('h1').style.background= 'var(--color-secondary)'
+
+//going sideways
+// console.log(h1.previousElementSibling);
+// console.log(h1.nextElementSibling);
+
+// // console.log(h1.parentElement.children);
+// const arr = [...h1.parentElement.children].forEach(function (el) {
+//   if (el !== h1) el.style.transform = 'scale(0.5)';
+// });
 
 // const addAlert = e => {
 //   alert('mouse entered');
