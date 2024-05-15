@@ -11,8 +11,15 @@ const allBtn = document.getElementsByTagName('button');
 const header = document.querySelector('.header');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
 const section_1 = document.getElementById('section--1');
-const nav__links = document.querySelector('.nav__links');
 const h1 = document.querySelector('h1');
+//tabbed component
+const operationTabs = document.querySelectorAll('.operations__tab');
+const tabContainer = document.querySelector('.operations__tab-container');
+const operationContent = document.querySelectorAll('.operations__content');
+//nav
+const nav = document.querySelector('.nav');
+const nav__links = document.querySelector('.nav__links');
+const nav__link = document.querySelector('.nav__link');
 
 const openModal = function (e) {
   e.preventDefault();
@@ -103,11 +110,6 @@ btnScrollTo.addEventListener('click', e => {
   section_1.scrollIntoView({ behavior: 'smooth' });
 });
 
-//tabbed component
-const operationTabs = document.querySelectorAll('.operations__tab');
-const tabContainer = document.querySelector('.operations__tab-container');
-const operationContent = document.querySelectorAll('.operations__content');
-
 //event delegation
 tabContainer.addEventListener('click', function (e) {
   const clickedTab = e.target.closest('.operations__tab');
@@ -126,6 +128,30 @@ tabContainer.addEventListener('click', function (e) {
     .querySelector(`.operations__content--${clickedTab.dataset.tab}`)
     .classList.add('operations__content--active');
 });
+
+//menu fade animation
+
+function handleOver(e) {
+  if (e.target.classList.contains('nav__link')) {
+    const linkOver = e.target;
+    const siblings = linkOver.closest('.nav').querySelectorAll('.nav__link');
+    const logo = linkOver.closest('.nav').querySelector('img');
+
+    siblings.forEach(el => {
+      if (el !== linkOver) el.style.opacity = this;
+    });
+    logo.style.opacity = this;
+  }
+}
+
+nav.addEventListener('mouseover', handleOver.bind(0.5));
+nav.addEventListener('mouseout', handleOver.bind(1));
+
+
+
+window.addEventListener('scroll',function(){
+  console.log(window.scrollY)
+})
 
 //going downWords:child
 // console.log(h1.querySelectorAll('.highlight'));
