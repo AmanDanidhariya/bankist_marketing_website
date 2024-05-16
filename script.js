@@ -5,11 +5,13 @@ const modal = document.querySelector('.modal');
 const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
-const section = document.querySelectorAll('.section');
+
 const allBtn = document.getElementsByTagName('button');
 const header = document.querySelector('.header');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
+//sections
 const section_1 = document.getElementById('section--1');
+const section = document.querySelectorAll('.section');
 const h1 = document.querySelector('h1');
 //tabbed component
 const operationTabs = document.querySelectorAll('.operations__tab');
@@ -164,7 +166,6 @@ const navHeight = nav.getBoundingClientRect().height;
 
 function stickyNav(entries) {
   const [entry] = entries;
-  console.log(entry);
   if (!entry.isIntersecting) {
     nav.classList.add('sticky');
   } else {
@@ -178,6 +179,46 @@ const headerObserver = new IntersectionObserver(stickyNav, {
   rootMargin: `-${navHeight}px`,
 });
 headerObserver.observe(header);
+
+//reveal section
+
+const revealSection = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  entry.target.classList.remove('section--hidden');
+  observer.unobserve(entry.target);
+};
+
+const sectionObserver = new IntersectionObserver(revealSection, {
+  root: null,
+  threshold: 0.15,
+});
+section.forEach(sect => {
+  sectionObserver.observe(sect);
+  sect.classList.add('section--hidden');
+});
+
+//lazy loading images
+const imgtarget = document.querySelectorAll('img[data-src]');
+
+const lazyImg = function (entries, observer) {
+  const [entry] = entries;
+  if (!entry.isIntersecting) return;
+  entry.target.src = entry.target.dataset.src;
+  entry.target.addEventListener('load', function () {
+    entry.target.classList.remove('lazy-img');
+  });
+  observer.unobserve(entry.target);
+};
+
+const imgObserver = new IntersectionObserver(lazyImg, {
+  root: null,
+  threshold: 0,
+  rootMargin: '200px',
+});
+imgtarget.forEach(target => {
+  imgObserver.observe(target);
+});
 
 //going downWords:child
 // console.log(h1.querySelectorAll('.highlight'));
