@@ -6,7 +6,6 @@ const overlay = document.querySelector('.overlay');
 const btnCloseModal = document.querySelector('.btn--close-modal');
 const btnsOpenModal = document.querySelectorAll('.btn--show-modal');
 const section = document.querySelectorAll('.section');
-const sectionId = document.getElementById('#section--1');
 const allBtn = document.getElementsByTagName('button');
 const header = document.querySelector('.header');
 const btnScrollTo = document.querySelector('.btn--scroll-to');
@@ -147,11 +146,38 @@ function handleOver(e) {
 nav.addEventListener('mouseover', handleOver.bind(0.5));
 nav.addEventListener('mouseout', handleOver.bind(1));
 
+//sticky navigation
+// const initialCoords = section_1.getBoundingClientRect();
+// console.log(initialCoords);
+// console.log(initialCoords.top);
 
+// window.addEventListener('scroll', function () {
+//   console.log(window.scrollY);
+//   if (window.scrollY > initialCoords.top) {
+//     nav.classList.add('sticky');
+//   } else {
+//     nav.classList.remove('sticky');
+//   }
+// });
 
-window.addEventListener('scroll',function(){
-  console.log(window.scrollY)
-})
+const navHeight = nav.getBoundingClientRect().height;
+
+function stickyNav(entries) {
+  const [entry] = entries;
+  console.log(entry);
+  if (!entry.isIntersecting) {
+    nav.classList.add('sticky');
+  } else {
+    nav.classList.remove('sticky');
+  }
+}
+
+const headerObserver = new IntersectionObserver(stickyNav, {
+  root: null,
+  threshold: 0,
+  rootMargin: `-${navHeight}px`,
+});
+headerObserver.observe(header);
 
 //going downWords:child
 // console.log(h1.querySelectorAll('.highlight'));
